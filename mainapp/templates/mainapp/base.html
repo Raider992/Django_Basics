@@ -1,4 +1,5 @@
-{% load static %}
+{% load staticfiles %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+
     <title>{% block title %}{% endblock %}</title>
+
+    <link rel="icon" href="{% static 'img/pycharm-PyCharm_400x400_Twitter_logo_white.png' %}" sizes="16x16" type="image/png">
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
