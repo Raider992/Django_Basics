@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -9,7 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', mainapp_views.index, name='index'),
     path('products/', mainapp_views.products, name='products'),
-    path('context', mainapp_views.test_context)
+    path('auth/', include('authapp.urls'))
 ]
 
 if settings.DEBUG:
