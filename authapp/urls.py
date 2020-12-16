@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -11,4 +11,6 @@ urlpatterns = [
     path('login/', authapp_views.login, name='login'),
     path('logout', authapp_views.logout, name='logout'),
     path('register/', authapp_views.register, name='register'),
+    path('auth/', include('mainapp.urls',))
+
 ]
