@@ -11,6 +11,7 @@ urlpatterns = [
     path('login/', authapp_views.login, name='login'),
     path('logout', authapp_views.logout, name='logout'),
     path('register/', authapp_views.register, name='register'),
-    path('auth/', include('mainapp.urls',))
+    path('profile/', authapp_views.profile, name='profile'),
+    path('auth/', include('mainapp.urls', ))
 
 ]

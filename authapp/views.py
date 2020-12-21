@@ -1,19 +1,24 @@
 from django.shortcuts import render, HttpResponseRedirect
-from authapp.forms import UserLoginForm, UserRegisterForm
-from django.contrib import auth
+from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from django.contrib import auth, messages
 from django.urls import reverse
 
 
 def login(request):
-    form = UserLoginForm(data=request.POST)
-    if request.method == 'POST' and form.is_valid():
-        username = request.POST['username']
-        password = request.POST['password']
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
 
-        user = auth.authenticate(username=username, password=password)
-        if user and user.is_active:
-            auth.login(request, user)
-            return HttpResponseRedirect(reverse('main'))
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+
+            user = auth.authenticate(username=username, password=password)
+            if user and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('main'))
+
+    else:
+        form = UserLoginForm()
 
     context = {
         'title': 'авторизация',
@@ -36,6 +41,7 @@ def register(request):
         reg_form = UserRegisterForm(data=request.POST)
         if reg_form.is_valid():
             reg_form.save()
+            messages.success(request, 'Вы успешно зарегистрировались')
             return HttpResponseRedirect(reverse('authapp:login'))
     else:
         reg_form = UserRegisterForm()
@@ -49,3 +55,23 @@ def register(request):
     }
 
     return render(request, 'authapp/register.html', context)
+
+
+def profile(request):
+    if request.method == "POST":
+        form = UserProfileForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('auth:profile'))
+
+    else:
+        form = UserProfileForm()
+
+    context = {
+        'title': 'профиль',
+        'style_link': 'css/profile.css',
+
+        'form': form
+    }
+
+    return render(request, 'authapp/profile.html', context)
