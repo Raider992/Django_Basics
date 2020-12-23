@@ -36,7 +36,6 @@ class UserRegisterForm(UserCreationForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Введите Вашу фамилию'
 
         self.fields['password1'].widget.attrs['placeholder'] = 'Введите пароль'
-        # self.fields['password1'].widget.help_text = 'от 8 знаков, должны быть строчные и заглавные буквы и цифры'
 
         self.fields['password2'].widget.attrs['placeholder'] = 'Подтвердите пароль'
 
@@ -47,12 +46,13 @@ class UserRegisterForm(UserCreationForm):
 class UserProfileForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'avatar', 'username', 'email')
+        fields = ('first_name', 'last_name', 'avatar', 'username', 'email', 'birthdate')
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['readonly'] = True
-        self.fields['email'].widget.attrs['readonly'] = True
-
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
+
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
+        self.fields['avatar'].widget.attrs['class'] = 'custom-file-input'

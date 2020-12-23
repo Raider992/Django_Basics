@@ -3,6 +3,9 @@ from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 from django.contrib import auth, messages
 from django.urls import reverse
 
+from cartapp.models import Cart
+from cartapp.views import count_total_price
+
 
 def login(request):
     if request.method == 'POST':
@@ -59,17 +62,23 @@ def register(request):
 
 def profile(request):
     if request.method == "POST":
-        form = UserProfileForm(data=request.POST, instance=request.user)
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('auth:profile'))
 
     else:
-        form = UserProfileForm()
+        form = UserProfileForm(instance=request.user)
+
+
 
     context = {
         'title': 'профиль',
         'style_link': 'css/profile.css',
+
+        'carts': Cart.objects.filter(user=request.user),
+
+        'carts_total_price': count_total_price(request),
 
         'form': form
     }
