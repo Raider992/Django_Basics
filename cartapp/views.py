@@ -1,9 +1,11 @@
 from django.shortcuts import HttpResponseRedirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from mainapp.models import Product
 from cartapp.models import Cart
 
 
+@login_required()
 def cart_add(request, id_product=None):
     product = get_object_or_404(Product, id=id_product)
     carts = Cart.objects.filter(user=request.user, product=product)
@@ -20,6 +22,7 @@ def cart_add(request, id_product=None):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def cart_add_item(request, id_product=None):
     cart = Cart.objects.get(id=id_product)
     cart.quantity += 1
@@ -27,6 +30,7 @@ def cart_add_item(request, id_product=None):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def cart_remove_item(request, id_product=None):
     cart = Cart.objects.get(id=id_product)
 
@@ -40,6 +44,7 @@ def cart_remove_item(request, id_product=None):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def cart_clear_position(request, id_product=None):
     cart = Cart.objects.get(id=id_product)
 
@@ -47,15 +52,8 @@ def cart_clear_position(request, id_product=None):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def cart_clear(request):
     cart = Cart.objects.all()
     cart.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-def count_total_price(request):
-    carts = Cart.objects.filter(user=request.user)
-    total = 0
-    for cart in carts:
-        total += cart.product.price * cart.product.quantity
-    return total

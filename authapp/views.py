@@ -4,7 +4,6 @@ from django.contrib import auth, messages
 from django.urls import reverse
 
 from cartapp.models import Cart
-from cartapp.views import count_total_price
 
 
 def login(request):
@@ -70,15 +69,13 @@ def profile(request):
     else:
         form = UserProfileForm(instance=request.user)
 
-
+    carts = Cart.objects.filter(user=request.user)
 
     context = {
         'title': 'профиль',
         'style_link': 'css/profile.css',
 
-        'carts': Cart.objects.filter(user=request.user),
-
-        'carts_total_price': count_total_price(request),
+        'carts': carts,
 
         'form': form
     }
