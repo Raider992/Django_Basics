@@ -1,5 +1,7 @@
 from django.shortcuts import HttpResponseRedirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 from mainapp.models import Product
 from cartapp.models import Cart
@@ -24,10 +26,18 @@ def cart_add(request, id_product=None):
 
 @login_required
 def cart_add_item(request, id_product=None):
-    cart = Cart.objects.get(id=id_product)
-    cart.quantity += 1
-    cart.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if request.is_ajax():
+        id_product = int(id_product)
+        cart = Cart.objects.get(id=id_product)
+        cart.quantity += 1
+        cart.save()
+
+        carts = Cart.objects.filter(user=request.user)
+        context = {
+            'carts': carts
+        }
+        response = render_to_string('cartapp/cart.html', context)
+        return JsonResponse({'result': response})
 
 
 @login_required
@@ -57,3 +67,42 @@ def cart_clear(request):
     cart = Cart.objects.all()
     cart.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
+
+# @login_required
+# def cart_add_item(request, id_product=None):
+#     cart = Cart.objects.get(id=id_product)
+#     cart.quantity += 1
+#     cart.save()
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#
+#
+# @login_required
+# def cart_remove_item(request, id_product=None):
+#     cart = Cart.objects.get(id=id_product)
+#
+#     if cart.quantity > 1:
+#         cart.quantity -= 1
+#         cart.save()
+#         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#
+#     if cart.quantity == 1:
+#         cart.delete()
+#         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#
+#
+# @login_required
+# def cart_clear_position(request, id_product=None):
+#     cart = Cart.objects.get(id=id_product)
+#
+#     cart.delete()
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#
+#
+# @login_required
+# def cart_clear(request):
+#     cart = Cart.objects.all()
+#     cart.delete()
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

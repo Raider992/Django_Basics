@@ -10,7 +10,9 @@
     {{ title|title }}
 {% endblock %}
 
-{% block script %}{% endblock %}
+{% block script %}
+    <script src="{% static 'js/cart.js' %}" defer></script>
+{% endblock %}
 
 {% block content %}
     <div class="container">
