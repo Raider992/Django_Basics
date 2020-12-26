@@ -40,7 +40,7 @@ document.querySelector('.col-lg-5').addEventListener('click', e => {
         try {
             const response = await fetch(url);
             const json = await response.json();
-            console.log('Success ' + JSON.stringify(json))
+            console.log('Success ' + json)
         } catch (e) {
             console.log(e)
         }
