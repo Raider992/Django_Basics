@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>GeekShop - {% block title %}{% endblock %}</title>
 
     <link rel="icon" href="{% static 'img/pycharm-PyCharm_400x400_Twitter_logo_white.png' %}" sizes="16x16"
           type="image/png">
@@ -49,7 +49,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                    <a class="nav-link" href="#">{{ user.first_name|capfirst }} <i class="fas fa-user-circle"></i></a>
+                    <a class="nav-link" href="{% url 'authapp:profile' %}">{{ user.first_name|capfirst }} <i class="fas fa-user-circle"></i></a>
                 </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'authapp:logout' %}">Выйти <i class="fas fa-sign-out-alt"></i></a>
