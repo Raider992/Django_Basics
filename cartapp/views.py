@@ -25,33 +25,21 @@ def cart_add(request, id_product=None):
 
 
 @login_required
-def cart_add_item(request, id_product=None):
+def cart_edit(request, id, quantity):
     if request.is_ajax():
-        id_product = int(id_product)
-        cart = Cart.objects.get(id=id_product)
-        cart.quantity += 1
-        cart.save()
-
+        quantity = int(quantity)
+        cart = Cart.objects.get(id=int(id))
+        if quantity > 0:
+            cart.quantity = quantity
+            cart.save()
+        else:
+            cart.delete()
         carts = Cart.objects.filter(user=request.user)
         context = {
-            'carts': carts
+            'carts': carts,
         }
-        response = render_to_string('cartapp/cart.html', context)
-        return JsonResponse({'result': response})
-
-
-@login_required
-def cart_remove_item(request, id_product=None):
-    cart = Cart.objects.get(id=id_product)
-
-    if cart.quantity > 1:
-        cart.quantity -= 1
-        cart.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-    if cart.quantity == 1:
-        cart.delete()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        result = render_to_string('cartapp/cart.html', context)
+        return JsonResponse({'result': result})
 
 
 @login_required
