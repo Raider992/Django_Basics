@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'corsheaders',
 
+    'adminapp',
     'mainapp',
     'authapp',
     'cartapp'

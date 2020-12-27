@@ -10,7 +10,8 @@ urlpatterns = [
     path('', mainapp_views.index, name='main'),
     path('auth/', include('authapp.urls', namespace='auth')),
     path('products/', include('mainapp.urls', namespace='products')),
-    path('cart/', include('cartapp.urls', namespace='cart'))
+    path('cart/', include('cartapp.urls', namespace='cart')),
+    path('admin-staff', include('adminapp.urls', namespace='admin_staff'))
 ]
 
 if settings.DEBUG:
