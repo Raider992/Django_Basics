@@ -30,7 +30,8 @@
                 <h1 class="my-4">GeekShop</h1>
                 <div class="list-group">
                     {% for category in categories %}
-                        <a href="#" class="list-group-item">{{ category.name }}</a>
+                        <a href="{% url 'mainapp:products' category.id %}"
+                           class="list-group-item">{{ category.name }}</a>
                     {% endfor %}
                 </div>
 
@@ -88,7 +89,10 @@
                                     <p class="card-text">{{ product.description }}</p>
                                 </div>
                                 <div class="card-footer text-center">
-                                    <a href="{% url 'cart:cart_add' product.id %}"><button type="button" class="btn btn-outline-success">Отправить в корзину</button></a>
+                                    <a href="{% url 'cart:cart_add' product.id %}">
+                                        <button type="button" class="btn btn-outline-success">Отправить в корзину
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -97,6 +101,30 @@
 
                 </div>
                 <!-- /.row -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
+                            <a class="page-link"
+                               href="{% if products.has_previous %} {% url 'mainapp:products_page' products.previous_page_number %} {% else %} # {% endif %}">
+                                Previous
+                            </a>
+                        </li>
+                        {% for page in products.paginator.page_range %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{% url 'mainapp:products_page' page %}">
+                                    {{ page }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <li class="page-item {% if not products.has_next %} disabled {% endif %}">
+                            <a class="page-link"
+                               href="{% if products.has_next %} {% url 'mainapp:products_page' products.next_page_number %} {% else %} # {% endif %}">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
             </div>
             <!-- /.col-lg-9 -->
